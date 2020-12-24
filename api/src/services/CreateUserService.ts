@@ -19,7 +19,7 @@ class CreateUserService {
     });
 
     if (existentUser) {
-      throw new AppError('Este usuário já possui uma conta');
+      throw new AppError('Este usuário já possui uma conta.');
     }
 
     const user = usersRepository.create({
@@ -27,6 +27,8 @@ class CreateUserService {
       password,
       email,
     });
+
+    await usersRepository.save(user);
 
     return user;
   }

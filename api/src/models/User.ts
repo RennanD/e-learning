@@ -7,12 +7,12 @@ import {
   DeleteDateColumn,
 } from 'typeorm';
 
-import { uuid } from 'uuidv4';
+import { v4 } from 'uuid';
 
 @Entity('users')
 class User {
   constructor() {
-    this.id = uuid();
+    this.id = v4();
     this.role = 'USER';
   }
 

@@ -1,3 +1,5 @@
 node_modules
 .env
-ormconfig.js
+
+tmp/uploads/*
+!tmp/uploads/.gitkeep

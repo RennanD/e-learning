@@ -14,7 +14,7 @@ interface TokenSubjet {
 interface TokenPayload {
   iat: number;
   exp: number;
-  sub: TokenSubjet;
+  sub: string;
 }
 
 export function ensureUserAuthenticated(
@@ -25,7 +25,7 @@ export function ensureUserAuthenticated(
   const authHeader = request.headers.authorization;
 
   if (!authHeader) {
-    throw new AppError('JWT token is missing', 'permisson_error', 401);
+    throw new AppError('JWT token is missing', 'permission_error', 401);
   }
 
   const [, token] = authHeader.split(' ');
@@ -37,6 +37,8 @@ export function ensureUserAuthenticated(
 
     const { sub, exp } = decoded as TokenPayload;
 
+    const subject: TokenSubjet = JSON.parse(sub);
+
     const current_time = Date.now() / 1000;
 
     if (exp < current_time) {
@@ -44,12 +46,12 @@ export function ensureUserAuthenticated(
     }
 
     request.user = {
-      subject: sub,
+      subject,
     };
 
     return next();
   } catch {
-    throw new AppError('Invalid JWT token', 'permisson_error', 401);
+    throw new AppError('Invalid JWT token', 'permission_error', 401);
   }
 }
 
@@ -73,7 +75,9 @@ export function ensureAdminAuthenticated(
 
     const { sub, exp } = decoded as TokenPayload;
 
-    if (sub.role !== 'ADMIN') {
+    const subject: TokenSubjet = JSON.parse(sub);
+
+    if (subject.role !== 'ADMIN') {
       throw new AppError('Access Dinned', 'permission_error', 401);
     }
 
@@ -84,7 +88,7 @@ export function ensureAdminAuthenticated(
     }
 
     request.user = {
-      subject: sub,
+      subject,
     };
 
     return next();

@@ -12,8 +12,15 @@ interface Request {
   password: string;
 }
 
+interface Response {
+  id: string;
+  email: string;
+  name: string;
+  role: string;
+}
+
 class CreateUserService {
-  public async run({ name, email, password }: Request): Promise<User> {
+  public async run({ name, email, password }: Request): Promise<Response> {
     const usersRepository = getRepository(User);
 
     const existentUser = await usersRepository.findOne({
@@ -34,7 +41,12 @@ class CreateUserService {
 
     await usersRepository.save(user);
 
-    return user;
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+    };
   }
 }
 

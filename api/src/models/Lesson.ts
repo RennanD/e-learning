@@ -2,17 +2,19 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
+  ManyToOne,
+  JoinColumn,
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
-  OneToMany,
 } from 'typeorm';
 
 import { v4 } from 'uuid';
-import Lesson from './Lesson';
 
-@Entity('courses')
-class Course {
+import Course from './Course';
+
+@Entity('lessons')
+class Lesson {
   constructor() {
     this.id = v4();
   }
@@ -21,13 +23,23 @@ class Course {
   id: string;
 
   @Column()
+  course_id: string;
+
+  @Column()
   name: string;
 
   @Column()
-  image: string;
+  duration: number;
 
-  @OneToMany(() => Lesson, lesson => lesson)
-  lessons: Lesson[];
+  @Column()
+  description: string;
+
+  @Column()
+  video_id: string;
+
+  @ManyToOne(() => Course)
+  @JoinColumn({ name: 'course_id' })
+  course?: Course;
 
   @CreateDateColumn()
   created_at: Date;
@@ -39,4 +51,4 @@ class Course {
   deleted_at: Date;
 }
 
-export default Course;
+export default Lesson;

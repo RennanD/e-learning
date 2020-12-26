@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 
-import { verify } from 'jsonwebtoken';
+import { verify, TokenExpiredError } from 'jsonwebtoken';
 
 import authConfig from '../config/auth';
 
@@ -32,25 +32,31 @@ export function ensureUserAuthenticated(
 
   const { secret } = authConfig.jwt;
 
+  if (!secret) {
+    throw new AppError('Invalid secret token', 'auth_error', 401);
+  }
+
   try {
     const decoded = verify(token, secret);
 
-    const { sub, exp } = decoded as TokenPayload;
+    const { sub } = decoded as TokenPayload;
 
     const subject: TokenSubjet = JSON.parse(sub);
-
-    const current_time = Date.now() / 1000;
-
-    if (exp < current_time) {
-      throw new AppError('Invalid JWT token', 'auth_error', 401);
-    }
 
     request.user = {
       subject,
     };
 
     return next();
-  } catch {
+  } catch (err) {
+    if (err instanceof AppError) {
+      throw new AppError(err.message, err.type, err.statusCode);
+    }
+
+    if (err instanceof TokenExpiredError) {
+      throw new AppError('Your session has expired', 'auth_error', 401);
+    }
+
     throw new AppError('Invalid JWT token', 'permission_error', 401);
   }
 }
@@ -70,21 +76,19 @@ export function ensureAdminAuthenticated(
 
   const { secret } = authConfig.jwt;
 
+  if (!secret) {
+    throw new AppError('Invalid secret token', 'auth_error', 401);
+  }
+
   try {
     const decoded = verify(token, secret);
 
-    const { sub, exp } = decoded as TokenPayload;
+    const { sub } = decoded as TokenPayload;
 
     const subject: TokenSubjet = JSON.parse(sub);
 
     if (subject.role !== 'ADMIN') {
-      throw new AppError('Access Dinned', 'permission_error', 401);
-    }
-
-    const current_time = Date.now() / 1000;
-
-    if (exp < current_time) {
-      throw new AppError('Invalid JWT token', 'auth_error', 401);
+      throw new AppError('Access dinned!', 'permission_error', 401);
     }
 
     request.user = {
@@ -92,7 +96,15 @@ export function ensureAdminAuthenticated(
     };
 
     return next();
-  } catch {
+  } catch (err) {
+    if (err instanceof AppError) {
+      throw new AppError(err.message, err.type, err.statusCode);
+    }
+
+    if (err instanceof TokenExpiredError) {
+      throw new AppError('Your session has expired', 'auth_error', 401);
+    }
+
     throw new AppError('Invalid JWT token', 'permission_error', 401);
   }
 }

@@ -1,11 +1,13 @@
 import { Router } from 'express';
-import sessionsRouter from './sessions.routes';
 
 import usersRouter from './user.routes';
+import sessionsRouter from './sessions.routes';
+import coursesRouter from './courses.routes';
 
 const router = Router();
 
 router.use('/users', usersRouter);
 router.use('/sessions', sessionsRouter);
+router.use('/courses', coursesRouter);
 
 export default router;

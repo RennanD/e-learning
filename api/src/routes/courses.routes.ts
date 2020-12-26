@@ -17,5 +17,10 @@ coursesRouter.get('/', CoursesController.list);
 coursesRouter.use(ensureAdminAuthenticated);
 
 coursesRouter.post('/', upload.single('image'), CoursesController.create);
+coursesRouter.put(
+  '/:course_id',
+  upload.single('image'),
+  CoursesController.update,
+);
 
 export default coursesRouter;

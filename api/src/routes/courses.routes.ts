@@ -12,6 +12,8 @@ const coursesRouter = Router();
 
 const upload = multer(multerConfig);
 
+coursesRouter.get('/', CoursesController.list);
+
 coursesRouter.use(ensureAdminAuthenticated);
 
 coursesRouter.post('/', upload.single('image'), CoursesController.create);

@@ -1,8 +1,10 @@
 import React from 'react';
+import { eLearning } from '../../assets/icons';
 import { heroImage } from '../../assets/images';
 
 import {
   Container,
+  BackgroudImage,
   HeroImage,
   Title,
   Subtitle,
@@ -13,6 +15,7 @@ import {
 const Login: React.FC = () => {
   return (
     <Container>
+      <BackgroudImage source={eLearning} />
       <HeroImage source={heroImage} resizeMode="contain" />
       <Title>Aprenda da melhor forma</Title>
       <Subtitle>

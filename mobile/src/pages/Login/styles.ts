@@ -9,8 +9,17 @@ export const Container = styled.View`
   background: #6548a3;
 `;
 
+export const BackgroudImage = styled.Image`
+  position: absolute;
+  left: -12.27%;
+  right: -12.27%;
+  top: 3.69%;
+  bottom: 33.99%;
+  z-index: -3;
+`;
+
 export const HeroImage = styled.Image`
-  height: 304px;
+  height: 40%;
 `;
 
 export const Title = styled.Text`
@@ -26,7 +35,7 @@ export const Subtitle = styled.Text`
   color: #edebf5;
   font-size: 15px;
   line-height: 25px;
-  margin-top: 20px;
+  margin-top: 4px;
   font-weight: 400;
   width: 217px;
 `;
@@ -38,14 +47,12 @@ export const LoginButton = styled(RectButton)`
 
   height: 56px;
 
-  bottom: 20px;
-  left: 20px;
-  right: 20px;
-
-  /* Pink */
+  bottom: 30px;
+  left: 30px;
+  right: 30px;
 
   background: #ff6680;
-  border-radius: 100px;
+  border-radius: 25px;
 `;
 
 export const LoginButtonText = styled.Text`
